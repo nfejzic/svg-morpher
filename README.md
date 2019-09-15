@@ -34,4 +34,4 @@ This module uses two dependencies:
 
 2. Just.animate - library for animation. In this case, Timeline is used for animation.
 
-**Author** @nfejzic
+**Author** @nfejzic - Nadir Fejzic
