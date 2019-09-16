@@ -1,0 +1,31 @@
+{
+  "name": "svg-morpher",
+  "version": "1.0.1",
+  "description": "Module used for morphing SVG into another SVG, specifically to SVG with different amount of Path tags. It does so with the help of Flubber and just.animate libraries.",
+  "main": "SVGMorpher.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nfejzic/svg-morpher.git"
+  },
+  "keywords": [
+    "SVG",
+    "Morpher",
+    "Morph",
+    "Animation",
+    "JavaScript",
+    "React"
+  ],
+  "author": "Nadir Fejzic",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nfejzic/svg-morpher/issues"
+  },
+  "homepage": "https://github.com/nfejzic/svg-morpher#readme",
+  "dependencies": {
+    "flubber": "^0.4.2",
+    "just-animate": "^2.6.2"
+  }
+}
