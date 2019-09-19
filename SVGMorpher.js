@@ -1,4 +1,5 @@
-import { timeline, interpolate } from "just-animate";
+import { interpolate, timeline } from "just-animate";
+
 let flubber = require("flubber");
 
 const SVGMorpher = {
@@ -17,7 +18,8 @@ const SVGMorpher = {
   // @parentElement - element which is the container of the SVG to animate
   // @roSvgEl - SVG element to which the animating element should morph
   // duration - length of the animation
-  // callback - callback function to be called with boolean variable passed of completing the animation
+  // callback - callback function to be called with boolean variable passed of
+  // completing the animation
   morphFromContainerToSvg(parentElementID, toSvgEl, duration, callback) {
     let container = document.getElementById(parentElementID);
     let fromSVG = container.firstChild;
@@ -34,11 +36,14 @@ const SVGMorpher = {
     let toSVG = toSvgEl;
 
     // paths are needed for flubber to animate.
-    // this code gets all the path nodes from each of SVGs and converts it into Array
+    // this code gets all the path nodes from each of SVGs and converts it into
+    // Array
     let fromPaths = Array.from(fromSVG.getElementsByTagName("path"));
     let toPaths = Array.from(toSVG.getElementsByTagName("path"));
 
-    // Some SVGs have more paths than the others. This function makes sure that the number of paths on two SVGs be the same, otherwise some pieces are going to be missing!
+    // Some SVGs have more paths than the others. This function makes sure that
+    // the number of paths on two SVGs be the same, otherwise some pieces are
+    // going to be missing!
     SVGMorpher.equalizeNumOfPaths(
       { parentSVG: fromSVG, paths: fromPaths },
       { parentSVG: toSVG, paths: toPaths }
@@ -56,13 +61,19 @@ const SVGMorpher = {
       callback
     );
     SVGMorpher.animationDuration = Date.now() - testTime;
-    if (this.animationDuration > 400) this.animationResolution += 5;
-    else if (this.animationDuration < 200) this.animationResolution -= 1;
+    if (this.animationDuration > 400) {
+      this.animationResolution =
+        this.animationResolution < 20 ? this.animationResolution + 1 : 20;
+    } else if (this.animationDuration < 200) {
+      this.animationResolution =
+        this.animationResolution > 5 ? this.animationResolution - 1 : 5;
+    }
   },
 
   // Animate the SVG Paths
   // following options are available
-  // @from - object containing fromPaths - paths to animate and fromSVG which has
+  // @from - object containing fromPaths - paths to animate and fromSVG which
+  // has
   // these paths element
   // @to - object containing paths we are animating to nad toSVG which has these
   // paths
@@ -93,7 +104,10 @@ const SVGMorpher = {
         targets: target,
         duration: duration,
         props: {
-          d: { value: [fromD, toD], interpolate: this.interpolateWithFlubber }
+          d: {
+            value: [fromD, toD],
+            interpolate: this.interpolateWithFlubber
+          }
         }
       });
 
@@ -154,7 +168,8 @@ const SVGMorpher = {
           "path"
         );
 
-        // the path to copy is going to be the last path of the SVG with fewer paths
+        // the path to copy is going to be the last path of the SVG with fewer
+        // paths
         let copyPath = case1
           ? fromPaths[fromPaths.length - 1]
           : toPaths[toPaths.length - 1];
@@ -175,7 +190,8 @@ const SVGMorpher = {
     }
   },
 
-  // This function animates scaling of viewBox - since many SVGs have different sizes, this is used to keep them in a constant size.
+  // This function animates scaling of viewBox - since many SVGs have different
+  // sizes, this is used to keep them in a constant size.
   interpolateViewBox(left, right) {
     const leftVal = left.split(" ").map(s => +s);
     const rightVal = right.split(" ").map(s => +s);
