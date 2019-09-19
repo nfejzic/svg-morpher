@@ -9,7 +9,7 @@ This is a helper module for morphing between SVGs. Specifically, between two SVG
 1. Import it as a module:
 
 ```
-import SVGMorpher from "SVGMorpher.js";
+import SVGMorpher from "svg-morpher";
 ```
 
 2. Use either morphFromTo or morphFromContainerToSvg function. First three parameters must be provided, callback is optional!
