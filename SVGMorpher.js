@@ -2,6 +2,10 @@ import { timeline, interpolate } from "just-animate";
 let flubber = require("flubber");
 
 const SVGMorpher = {
+  // animation resolution modifies flubbers maxSegmentLength option. The smaller
+  // the number, animation looks better, but performs slower.
+  animationResolution: 5,
+  animationDuration: 0,
   createSVGfromString(string) {
     let div = document.createElement("div");
     div.innerHTML = string.trim();
@@ -24,6 +28,8 @@ const SVGMorpher = {
 
   // morph the SVG
   morphFromTo(fromSvgEl, toSvgEl, duration, callback) {
+    let testTime = Date.now();
+
     let fromSVG = fromSvgEl;
     let toSVG = toSvgEl;
 
@@ -49,6 +55,9 @@ const SVGMorpher = {
       duration,
       callback
     );
+    SVGMorpher.animationDuration = Date.now() - testTime;
+    if (this.animationDuration > 400) this.animationResolution += 5;
+    else if (this.animationDuration < 200) this.animationResolution -= 1;
   },
 
   // Animate the SVG Paths
@@ -83,7 +92,9 @@ const SVGMorpher = {
       t1.fromTo(0, duration, {
         targets: target,
         duration: duration,
-        props: { d: { value: [fromD, toD], interpolate: flubber.interpolate } }
+        props: {
+          d: { value: [fromD, toD], interpolate: this.interpolateWithFlubber }
+        }
       });
 
       t1.play();
@@ -105,6 +116,12 @@ const SVGMorpher = {
     t2.play().on("finish", () => {
       // report as animation done!
       callback(true);
+    });
+  },
+
+  interpolateWithFlubber(fromShape, toShape) {
+    return flubber.interpolate(fromShape, toShape, {
+      maxSegmentLength: SVGMorpher.animationResolution
     });
   },
 
