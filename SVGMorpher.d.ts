@@ -11,17 +11,16 @@ declare namespace SVGMorpher {
 
   /** Creates an SVG from loaded string (in a file) */
   function createSVGfromString(string: string): SVGElement;
-  
 
   /** Morph elements
   - parentElement - element which is the container of the SVG to animate
   - roSvgEl - SVG element to which the animating element should morph
   - duration - length of the animation
   - callback - callback function to be called with boolean variable passed of completing the animation */
-  function morphFromContainerToSvg(parentElementID: string, toSvgEl: string, duration: number, callback: (val: boolean) => void): void;
+  function morphFromContainerToSvg(parentElementID: string, toSvgEl: SVGElement, duration: number, callback?: (val: boolean) => void): void;
 
   /** morph the SVG */
-  function morphFromTo(fromSvgEl: string, toSvgEl: string, duration: number, callback: (val: boolean) => void): void;
+  function morphFromTo(fromSvgEl: SVGElement, toSvgEl: SVGElement, duration: number, callback?: (val: boolean) => void): void;
 
   /** Animate the SVG Paths
     following options are available
