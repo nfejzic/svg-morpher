@@ -151,38 +151,33 @@ const SVGMorpher = {
     if (fromPaths.length - toPaths.length !== 0) {
       // determine which SVG has more paths
       const case1 = fromPaths.length < toPaths.length;
-      const case2 = fromPaths.length > toPaths.length;
 
       // find out how many paths are needed and store into diff variable
-      let diff = case1
-        ? toPaths.length - fromPaths.length
-        : fromPaths.length - toPaths.length;
+      let diff = Math.abs(toPaths.length - fromPaths.length)
+
+      // create new Path element
+      const elemPath = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "path"
+      );
+
+      // the path to copy is going to be the last path of the SVG with fewer
+      // paths
+      const copyPath = case1 ? fromPaths[fromPaths.length - 1] : toPaths[toPaths.length - 1];
+
+      // copy the path values - d element and store it into newly created Path
+      elemPath.setAttributeNS(null, "d", copyPath.getAttribute("d"));
 
       // insert a path into SVG with fewer paths, and repeat 'diff' many times
       for (let i = 0; i < diff; i++) {
-        // create new Path element
-        const elemPath = document.createElementNS(
-          "http://www.w3.org/2000/svg",
-          "path"
-        );
-
-        // the path to copy is going to be the last path of the SVG with fewer
-        // paths
-        const copyPath = case1
-          ? fromPaths[fromPaths.length - 1]
-          : toPaths[toPaths.length - 1];
-        // copy the path values - d element and store it into newly created Path
-        elemPath.setAttributeNS(null, "d", copyPath.getAttribute("d"));
-
         // append Path to SVG element with fewer paths
+        const clonePath = elemPath.cloneNode(true);
+        copyPath.parentElement.appendChild(clonePath);
+
         if (case1) {
-          const fromEl = fromSVG.getElementsByTagName("path");
-          fromEl.item(fromEl.length - 1).parentElement.appendChild(elemPath);
-          fromPaths.push(elemPath);
+          fromPaths.push(clonePath);
         } else {
-          const toEl = toSVG.getElementsByTagName("path");
-          toEl.item(toEl.length - 1).parentElement.appendChild(elemPath);
-          toPaths.push(elemPath);
+          toPaths.push(clonePath);
         }
       }
     }
